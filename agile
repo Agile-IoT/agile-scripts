@@ -34,7 +34,7 @@ case "$1" in
     #$BINDIR/compose/agile-compose rm agile-nodered
     $BINDIR/dbus/agile-dbus-stop
     ;;
-  down)
+  clean)
     $BINDIR/dbus/agile-dbus-stop
     $BINDIR/compose/agile-compose down
     ;;
@@ -62,7 +62,7 @@ case "$1" in
     ln -s $BINDIR/agile /usr/local/bin/
     ;;
   *)
-    echo "Usage: $0 {start|stop|restart|update|compose|install}"
+    echo "Usage: $0 {start|stop|restart|clean|update|compose|install}
     exit 1
     ;;
 esac
