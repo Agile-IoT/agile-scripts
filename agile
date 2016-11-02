@@ -54,8 +54,12 @@ case "$1" in
   zb-stop)
     $BINDIR/compose/agile-compose stop agile-zb-lamp agile-zb
     ;;
+  compose)
+    shift
+    $BINDIR/compose/agile-compose "$@"
+    ;;
   *)
-    echo "Usage: $0 {start|stop|restart|update}"
+    echo "Usage: $0 {start|stop|restart|update|compose}"
     exit 1
     ;;
 esac
