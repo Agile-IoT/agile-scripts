@@ -1,6 +1,6 @@
 #!/bin/bash
 
-BINDIR=$(dirname $(realpath $0))
+export BINDIR=$(dirname $(realpath $0))
 
 export COMPOSE_HTTP_TIMEOUT=300
 

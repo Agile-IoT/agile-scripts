@@ -15,7 +15,7 @@ wait_for_service (){
 
 case "$1" in
   start)
-    $BINDIR/dbus/agile-dbus-start
+    #$BINDIR/dbus/agile-dbus-start
     $BINDIR/compose/agile-compose up -d agile-core
     $BINDIR/compose/agile-compose up -d agile-ble
     wait_for_service "http://localhost:8080" 404
