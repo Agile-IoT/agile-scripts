@@ -59,7 +59,7 @@ case "$1" in
     $BINDIR/compose/agile-compose "$@"
     ;;
   install)
-    ln -s $BINDIR/agile /usr/local/bin/agile
+    ln -s $BINDIR/agile /usr/local/bin/
     ;;
   *)
     echo "Usage: $0 {start|stop|restart|update|compose|install}"
