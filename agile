@@ -63,6 +63,14 @@ case "$1" in
     ;;
   *)
     echo "Usage: $0 {start|stop|restart|clean|update|compose|install}
+         install: create symbolic link in /usr/local/bin
+         start: start all AGILE components
+         stop: stop all AGILE components
+         restart: stop and then start
+         clean: stop and remove all containers. AGILE persistent state will remain, but docker containers will be reinitialized
+         update: download newest version of docker containers
+         compose: use docker-compose commands for fine-grained control (e.g. docker compose logs)
+    "
     exit 1
     ;;
 esac
