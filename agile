@@ -58,8 +58,11 @@ case "$1" in
     shift
     $BINDIR/compose/agile-compose "$@"
     ;;
+  install)
+    ln -s $BINDIR/agile /usr/local/bin/agile
+    ;;
   *)
-    echo "Usage: $0 {start|stop|restart|update|compose}"
+    echo "Usage: $0 {start|stop|restart|update|compose|install}"
     exit 1
     ;;
 esac
