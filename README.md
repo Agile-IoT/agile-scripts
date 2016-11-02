@@ -45,10 +45,57 @@ sudo systemctl disable bluetooth
 sudo systemctl stop bluetooth
 ```
 
+### On Ubuntu 16.04 (x86_64)
+
+- Install recent versions of `docker` and `docker-compose`
+
+Based on the [offical instructions](https://docs.docker.com/engine/installation/linux/ubuntulinux/), these are the commands for docker
+
+```
+sudo apt-get update
+sudo apt-get install apt-transport-https ca-certificates
+sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
+echo "deb https://apt.dockerproject.org/repo ubuntu-xenial main" | sudo tee /etc/apt/sources.list.d/docker.list
+sudo apt-get update
+sudo apt-get install docker-engine
+sudo usermod -aG docker $USER
+```
+
+Install docker-compose using the [official method](https://docs.docker.com/compose/install/)
+
+```
+curl -L "https://github.com/docker/compose/releases/download/1.8.1/docker-compose-$(uname -s)-$(uname -m)" > /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
+```
+
+- Install ARM binformat support for docker
+
+Since our main platform is the Raspberry Pi, some of our containers might contain ARM binaries. Insall support for these as follows
+
+```
+apt-get install qemu binfmt-support qemu-user-static
+```
+
+- Disable and stop Bluez in the host
+
+```
+sudo systemctl disable bluetooth
+sudo systemctl stop bluetooth
+```
+
+
 ### On other machines (x86_64)
+
+- Install recent versions of `docker` and `docker-compose`
 
 On other machines, install docker (at least version 1.11) and docker-compose (at least version 1.8). Check it with `docker -v` and `docker-compose -v`.
 Read more on how to [install or upgrade](https://docs.docker.com/compose/install/)
+
+- Install ARM binformat support for docker
+
+```
+docker run --rm --privileged multiarch/qemu-user-static:register --reset
+```
 
 - Disable and stop Bluez in the host
 
