@@ -29,7 +29,7 @@ services:
 
 
     agile-ble:
-      image: agileiot/agile-core-$ARCH
+      image: agileiot/agile-ble-$ARCH
       depends_on:
         - agile-dbus
       volumes:
