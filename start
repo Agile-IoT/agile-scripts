@@ -16,8 +16,7 @@ fi
 
 docker rm -v $(docker ps -a -q -f status=exited 2>/dev/null) &>/dev/null || :
 docker rmi $(docker images -f "dangling=true" -q 2>/dev/null) &>/dev/null || :
-docker-compose down || :
-docker-compose up &
+/agile start
 
 set +x
 while true; do

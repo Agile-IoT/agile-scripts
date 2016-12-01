@@ -22,12 +22,10 @@ RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 37BBEE3F7AD95B3F &&
 
 COPY ./wrapdocker /usr/local/bin/wrapdocker
 
-COPY ./apps /apps
-COPY ./scripts /scripts
+COPY ./compose /compose
+COPY agile /agile
 
-WORKDIR /apps
-
-#RUN git clone https://github.com/craig-mulligan/agile-ui
+WORKDIR /
 
 # Define additional metadata for our image.
 VOLUME /var/lib/docker
