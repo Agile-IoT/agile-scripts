@@ -43,6 +43,27 @@ services:
                         hciconfig hci0 down && hciconfig hci0 up && /usr/local/libexec/bluetooth/bluetoothd -E &
                         scripts/start.sh BLE"
 
+    agile-data:
+      image: agileiot/agile-data-armv7l
+      environment:
+        - DEBUG=$DEBUG
+        - AGILE_DATA_UI_PORT=8083
+        - AGILE_DATA_WS_ADDRESS=ws://217.77.95.110:8080/ws
+      ports:
+        - 8083:8083/tcp
+        - 8086:8086/tcp
+      restart: always
+
+    agile-graph:
+      image: agileiot/agile-graph-armv7l
+      environment:
+        - DEBUG=agile-graph
+        - GF_AUTH_ANONYMOUS_ENABLED=true
+        - GF_SERVER_PORT:3000/tcp
+      ports:
+        - 3000:3000/tcp
+      restart: always
+
     agile-ui:
       image: agileiot/agile-ui-armv7l
       depends_on:
@@ -70,23 +91,6 @@ services:
         - 1880:1880/tcp
       links:
         - agile-core:agile
-      restart: always
-
-    agile-influxdb:
-      image: $IMAGE_INFLUXDB
-      volumes:
-       - $HOME/.agile/influxdb:/var/lib/influxdb
-      ports:
-        - 8083:8083/tcp
-        - 8086:8086/tcp
-      restart: always
-
-    agile-grafana:
-      image: $IMAGE_GRAFANA
-      volumes:
-       - $HOME/.agile/grafana:/var/lib/grafana
-      ports:
-        - 3000:3000/tcp
       restart: always
 
     agile-zb:
