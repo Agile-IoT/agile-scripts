@@ -1,7 +1,0 @@
-#!/bin/sh
-
-ARCH=$(uname -m)
-IMAGE=${1:-agileiot/agile-core-$ARCH}
-VERSION="latest"
-
-docker build -t $IMAGE:$VERSION .
