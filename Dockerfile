@@ -22,6 +22,7 @@ RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 37BBEE3F7AD95B3F &&
 
 COPY ./wrapdocker /usr/local/bin/wrapdocker
 
+COPY ./dbus /dbus
 COPY ./compose /compose
 COPY agile /agile
 
