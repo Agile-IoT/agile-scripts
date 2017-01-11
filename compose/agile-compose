@@ -12,7 +12,7 @@ export DBUS_SYSTEM_SOCKET=/var/run/dbus/system_bus_socket
 export DBUS_SESSION_SOCKET_DIR=$HOME/.agile/agile_bus/
 export DBUS_SESSION_SOCKET_NAME=agile_bus_socket
 export DBUS_SESSION_SOCKET=$DBUS_SESSION_SOCKET_DIR/$DBUS_SESSION_SOCKET_NAME
-export ARCH=`arch`
+export ARCH=`uname -m`
 
 case $ARCH in
   armv7l )
