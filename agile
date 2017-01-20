@@ -31,7 +31,6 @@ case "$1" in
     ;;
   stop)
     $BINDIR/compose/agile-compose stop
-    #$BINDIR/compose/agile-compose rm agile-nodered
     ;;
   clean)
     $BINDIR/dbus/agile-dbus-stop
