@@ -1,5 +1,8 @@
 #!/bin/bash
 
+realpath . &>/dev/null || realpath() {
+    [[ $1 = /* ]] && echo "$1" || echo "$PWD/${1#./}"
+}
 export BINDIR=$(dirname $(realpath $0))
 
 export COMPOSE_HTTP_TIMEOUT=300

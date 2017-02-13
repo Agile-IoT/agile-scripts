@@ -1,5 +1,10 @@
 #!/bin/sh
 
+realpath . &>/dev/null || realpath() {
+    P=$1
+    while readlink $P >/dev/null; do P=`readlink $P`; done
+    [[ $P = /* ]] && echo "$P" || echo "$PWD/${P#./}"
+}
 BINDIR=$(dirname $(realpath $0))
 
 is_service_up (){
