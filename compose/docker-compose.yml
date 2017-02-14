@@ -12,7 +12,7 @@ services:
       command: dbus-daemon --address=unix:path=/usr/src/app/.agile_bus/agile_bus_socket --config-file=/usr/src/app/agile.conf
 
     agile-core:
-      image: agileiot/agile-core-$ARCH
+      image: agileiot/agile-core-armv7l:demo20170125
       depends_on:
         - agile-dbus
       volumes:
@@ -29,7 +29,7 @@ services:
 
 
     agile-ble:
-      image: agileiot/agile-ble-$ARCH
+      image: agileiot/agile-ble-armv7l:demo20170125
       depends_on:
         - agile-dbus
       volumes:
@@ -44,7 +44,7 @@ services:
                         scripts/start.sh BLE"
 
     agile-ui:
-      image: agileiot/agile-ui-armv7l
+      image: agileiot/agile-ui-armv7l:demo20170125
       depends_on:
         - agile-core
       environment:
@@ -54,7 +54,7 @@ services:
       restart: always
 
     agile-osjs:
-      image: agileiot/agile-osjs-armv7l
+      image: agileiot/agile-osjs-armv7l:demo20170125
       depends_on:
         - agile-core
       ports:
@@ -62,7 +62,7 @@ services:
       restart: always
 
     agile-nodered:
-      image: agileiot/agile-nodered-armv7l
+      image: agileiot/agile-nodered-armv7l:demo20170125
       hostname: agile-nodered
       volumes:
         - $HOME/.agile/nodered:/root/.node-red
@@ -90,7 +90,7 @@ services:
       restart: always
 
     agile-zb:
-      image: agileiot/agile-zb-armv7l
+      image: agileiot/agile-zb-armv7l:demo20170125
       depends_on:
         - agile-dbus
       devices:
@@ -102,7 +102,7 @@ services:
       command: python3 dbus_server/dbus_server.py
 
     agile-zb-lamp:
-      image: agileiot/agile-zb-armv7l
+      image: agileiot/agile-zb-armv7l:demo20170125
       depends_on:
         - agile-zb
       volumes:
