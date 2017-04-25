@@ -1,18 +1,23 @@
 version: '2'
 
 services:
+  # agile-example:
+  #   build: apps/agile-example
+  #   ports:
+  #    - 80:80/tcp
+
   agile-dbus:
-    image: resin/armhf-alpine
+    container_name: agile-dbus
+    image: agileiot/agile-dbus-armv7l
+    # build: apps/agile-dbus
+    restart: always
     volumes:
       - $DBUS_SESSION_SOCKET_DIR:/usr/src/app/.agile_bus
-      - $BINDIR/../dbus/agile.conf:/usr/src/app/agile.conf
-    environment:
-      - DBUS_SESSION_BUS_ADDRESS=unix:path=/usr/src/app/.agile_bus/agile_bus_socket
-    restart: always
-    command: dbus-daemon --address=unix:path=/usr/src/app/.agile_bus/agile_bus_socket --config-file=/usr/src/app/agile.conf
 
   agile-core:
-    image: agileiot/agile-core-$ARCH
+    container_name: agile-core
+    image: agileiot/agile-core-armv7l
+    # build: apps/agile-core
     depends_on:
       - agile-dbus
     volumes:
@@ -23,13 +28,12 @@ services:
       - 8080:8080/tcp
     restart: always
     privileged: true
-    command: bash -c "scripts/start.sh DeviceManager &
-                      scripts/start.sh ProtocolManager &
-                      scripts/start.sh http"
-
+    command: bash -c "scripts/start.sh DeviceManager & scripts/start.sh ProtocolManager & scripts/start.sh http"
 
   agile-ble:
-    image: agileiot/agile-ble-$ARCH
+    container_name: agile-ble
+    image: agileiot/agile-ble-armv7l
+    # build: apps/agile-core
     depends_on:
       - agile-dbus
     volumes:
@@ -39,22 +43,34 @@ services:
     restart: always
     privileged: true
     network_mode: "host"
-    command: bash -c "mkdir -p /var/run/dbus && rm -f /var/run/dbus/pid && dbus-daemon --system &&
-                      hciconfig hci0 down && hciconfig hci0 up && /usr/local/libexec/bluetooth/bluetoothd -E &
-                      scripts/start.sh BLE"
+    command: bash -c "mkdir -p /var/run/dbus && rm -f /var/run/dbus/pid && dbus-daemon --system && hciconfig hci0 down && hciconfig hci0 up && /usr/local/libexec/bluetooth/bluetoothd -E & scripts/start.sh BLE"
 
-  agile-ui:
-    image: agileiot/agile-ui-armv7l
+  agile-dummy:
+    container_name: agile-dummy
+    image: agileiot/agile-dummy-armv7l
+    # build: apps/agile-dummy-protocol
     depends_on:
-      - agile-core
+      - agile-dbus
+    volumes:
+      - $DBUS_SESSION_SOCKET_DIR:/usr/src/app/.agile_bus
     environment:
-      - AGILE_CLIENT_PORT=$AGILE_CLIENT_PORT
-    ports:
-      - $AGILE_CLIENT_PORT:$AGILE_CLIENT_PORT
+      - DBUS_SESSION_BUS_ADDRESS=unix:path=/usr/src/app/.agile_bus/agile_bus_socket
     restart: always
 
+  agile-ui:
+    container_name: agile-ui
+    image: agileiot/agile-ui-armv7l:v0.1.1
+    # build: apps/agile-ui
+    restart: always
+    depends_on:
+      - agile-core
+    ports:
+      - 2000:1337/tcp
+
   agile-osjs:
+    container_name: agile-osjs
     image: agileiot/agile-osjs-armv7l
+    # build: apps/agile-osjs
     depends_on:
       - agile-core
     ports:
@@ -62,51 +78,39 @@ services:
     restart: always
 
   agile-nodered:
+    container_name: agile-nodered
     image: agileiot/agile-nodered-armv7l
+    # build: apps/agile-nodered
     hostname: agile-nodered
     volumes:
-      - $HOME/.agile/nodered:/root/.node-red
+      - $DATA/nodered:/root/.node-red
     ports:
       - 1880:1880/tcp
     links:
       - agile-core:agile
     restart: always
 
-  agile-influxdb:
-    image: $IMAGE_INFLUXDB
-    volumes:
-     - $HOME/.agile/influxdb:/var/lib/influxdb
-    ports:
-      - 8083:8083/tcp
-      - 8086:8086/tcp
-    restart: always
+#  agile-zb:
+#    container_name: agile-zb
+#    image: agileiot/agile-zb-armv7l
+#    # build: apps/agile-zb
+#    depends_on:
+#      - agile-dbus
+#    devices:
+#      - dev/ttyUSB0:/dev/ttyUSB0
+#    volumes:
+#      - $DBUS_SESSION_SOCKET_DIR:/usr/src/app/.agile_bus
+#    environment:
+#      - DBUS_SESSION_BUS_ADDRESS=unix:path=/usr/src/app/.agile_bus/agile_bus_socket
+#    command: python3 dbus_server/dbus_server.py
 
-  agile-grafana:
-    image: $IMAGE_GRAFANA
-    volumes:
-     - $HOME/.agile/grafana:/var/lib/grafana
-    ports:
-      - 3000:3000/tcp
-    restart: always
-
-  agile-zb:
-    image: agileiot/agile-zb-armv7l
-    depends_on:
-      - agile-dbus
-    devices:
-      - $AGILE_ZB_TTY:$AGILE_ZB_TTY
-    volumes:
-      - $DBUS_SESSION_SOCKET_DIR:/usr/src/app/.agile_bus
-    environment:
-      - DBUS_SESSION_BUS_ADDRESS=unix:path=/usr/src/app/.agile_bus/agile_bus_socket
-    command: python3 dbus_server/dbus_server.py
-
-  agile-zb-lamp:
-    image: agileiot/agile-zb-armv7l
-    depends_on:
-      - agile-zb
-    volumes:
-      - $DBUS_SESSION_SOCKET_DIR:/usr/src/app/.agile_bus
-    environment:
-      - DBUS_SESSION_BUS_ADDRESS=unix:path=/usr/src/app/.agile_bus/agile_bus_socket
-    command: python3 ge_link_bulb/ge_link_bulb_device.py
+#  agile-zb-lamp:
+#    container_name: agile-zb-lamp
+#    image: agileiot/agile-zb-armv7l
+#    depends_on:
+#      - agile-zb
+#    volumes:
+#      - $DBUS_SESSION_SOCKET_DIR:/usr/src/app/.agile_bus
+#    environment:
+#      - DBUS_SESSION_BUS_ADDRESS=unix:path=/usr/src/app/.agile_bus/agile_bus_socket
+#    command: python3 ge_link_bulb/ge_link_bulb_device.py
