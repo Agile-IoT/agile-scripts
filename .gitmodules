@@ -1,0 +1,6 @@
+[submodule "agile-stack"]
+	path = agile-stack
+	url = https://github.com/Agile-IoT/agile-stack.git
+[submodule "agile-cli"]
+	path = agile-cli
+	url = https://github.com/Agile-IoT/agile-cli.git
