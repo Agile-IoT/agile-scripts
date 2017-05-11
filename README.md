@@ -114,6 +114,7 @@ sudo systemctl stop bluetooth
 ```
 git clone https://github.com/Agile-IoT/agile-scripts.git
 cd agile-scripts
+git submodule update --init
 ```
 
 ## Configuration
